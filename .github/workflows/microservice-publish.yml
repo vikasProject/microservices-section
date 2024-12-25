@@ -29,7 +29,7 @@ jobs:
     # Build accounts microservice
     - name: Build Accounts Microservice with Maven
       run: |
-        cd microservices/accounts
+        cd accounts
         mvn clean install -DskipTests
 
     # Build loans microservice
