@@ -1,0 +1,87 @@
+name: Build, Package, and Push Microservices with Maven and Docker
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 21 using openjdk:21-jdk-slim
+      uses: docker://openjdk:21-jdk-slim
+      with:
+        entrypoint: /bin/bash  # Keep the default entrypoint to allow further commands
+
+    - name: Cache Maven dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    # Build accounts microservice
+    - name: Build Accounts Microservice with Maven
+      run: |
+        cd accounts
+        mvn clean install -DskipTests
+
+    # Build loans microservice
+    - name: Build Loans Microservice with Maven
+      run: |
+        cd microservices/loans
+        mvn clean install -DskipTests
+
+    # Build cards microservice
+    - name: Build Cards Microservice with Maven
+      run: |
+        cd microservices/cards
+        mvn clean install -DskipTests
+
+    # Build configserver microservice
+    - name: Build Configserver Microservice with Maven
+      run: |
+        cd microservices/configserver
+        mvn clean install -DskipTests
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}  # Docker username from GitHub secrets
+        password: ${{ secrets.DOCKER_PASSWORD }}  # Docker token from GitHub secrets
+
+    - name: Build and Push Docker Images for Accounts Microservice
+      run: |
+        cd microservices/accounts  # Navigate to accounts microservice directory
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/accounts:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/accounts:latest
+
+    - name: Build and Push Docker Images for Loans Microservice
+      run: |
+        cd microservices/loans  # Navigate to loans microservice directory
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/loans:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/loans:latest
+
+    - name: Build and Push Docker Images for Cards Microservice
+      run: |
+        cd microservices/cards  # Navigate to cards microservice directory
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/cards:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/cards:latest
+
+    - name: Build and Push Docker Images for Configserver Microservice
+      run: |
+        cd microservices/configserver  # Navigate to configserver microservice directory
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/configserver:latest .
+        docker push ${{ secrets.DOCKER_USERNAME }}/configserver:latest
+
+    - name: Clean up Docker resources
+      run: docker system prune -f
