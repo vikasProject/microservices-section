@@ -16,8 +16,10 @@ jobs:
     - name: Set up JDK 21 using openjdk:21-jdk-slim
       uses: docker://openjdk:21-jdk-slim
       with:
-        entrypoint: /bin/bash  # Keep the default entrypoint to allow further commands
-
+        java-version: '21'
+        distribution: 'adoptopenjdk'
+    - name: Verify Java Version
+      run: java -version
     - name: Cache Maven dependencies
       uses: actions/cache@v2
       with:
