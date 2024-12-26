@@ -1,6 +1,5 @@
 #Start with a base image containing Java runtime
-FROM openjdk:21-jdk-slim
-
+FROM openjdk:17
 # MAINTAINER instruction is deprecated in favor of using label
 # MAINTAINER eazybytes.com
 #Information around who maintains the image
