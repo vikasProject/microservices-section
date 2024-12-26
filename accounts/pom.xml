@@ -82,17 +82,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.4.2</version>
-				<configuration>
-					<to>
-						<image>vikidocker20/${project.artifactId}:s7</image>
-					</to>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.10.1</version> <!-- Use a more recent version -->
@@ -100,6 +89,7 @@
 					<release>21</release> <!-- Ensure that the release is set to 21 -->
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 
