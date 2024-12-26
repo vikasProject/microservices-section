@@ -13,13 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up JDK 21 using openjdk:21-jdk-slim
-      uses: docker://openjdk:21-jdk-slim
+    # Set up JDK 21 for Maven
+    - name: Set up JDK 21
+      uses: actions/setup-java@v2
       with:
         java-version: '21'
         distribution: 'adoptopenjdk'
+
+    # Verify Java Version to ensure it's JDK 21
     - name: Verify Java Version
       run: java -version
+
+    # Cache Maven dependencies to speed up builds
     - name: Cache Maven dependencies
       uses: actions/cache@v2
       with:
@@ -27,6 +32,12 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+
+    # Update Maven to the latest version that supports Java 21
+    - name: Install Maven
+      run: |
+        sudo apt-get update
+        sudo apt-get install maven
 
     # Build accounts microservice
     - name: Build Accounts Microservice with Maven
