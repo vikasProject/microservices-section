@@ -15,7 +15,7 @@
 	<name>accounts</name>
 	<description>Microservice for Accounts</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -70,7 +70,7 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <version>3.10.1</version>
             <configuration>
-                <release>21</release>
+                <release>17</release>
             </configuration>
         </plugin>
     </plugins>
