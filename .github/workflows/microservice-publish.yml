@@ -37,7 +37,7 @@ jobs:
     - name: Install Maven
       run: |
         sudo apt-get update
-        sudo apt-get install maven
+        sudo apt-get install -y maven
 
     # Build accounts microservice
     - name: Build Accounts Microservice with Maven
@@ -99,7 +99,10 @@ jobs:
     - name: Clean up Docker resources
       run: docker system prune -f
 
-          steps:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
