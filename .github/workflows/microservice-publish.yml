@@ -109,7 +109,7 @@ jobs:
     - name: SSH into EC2 and clone the repository
       run: |
         sshpass -p "${{ secrets.SERVER_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-          cd /home/${{ secrets.EC2_USER }}  
+          cd /home/${{ secrets.USER }}  
           git clone https://github.com/vikasProject/microservices-section.git
           ls -ltr
           cd microservices-section/docker-compose/default/
